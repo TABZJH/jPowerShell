@@ -356,7 +356,8 @@ public class PowerShell implements AutoCloseable {
         File tmpFile = null;
 
         try {
-            tmpFile = File.createTempFile("psscript_" + new Date().getTime(), ".ps1", this.tempFolder);
+            // use System.currentTimeMillis()
+            tmpFile = File.createTempFile("psscript_" + System.currentTimeMillis(), ".ps1", this.tempFolder);
             if (!tmpFile.exists()) {
                 return null;
             }
@@ -368,8 +369,9 @@ public class PowerShell implements AutoCloseable {
                 tmpWriter.newLine();
             }
 
+            // remove write, because this will error in begin/process/end module
             // Add end script line
-            tmpWriter.write("Write-Output \"" + END_SCRIPT_STRING + "\"");
+            // tmpWriter.write("Write-Output \"" + END_SCRIPT_STRING + "\"");
         } catch (IOException ioex) {
             logger.log(Level.SEVERE,
                     "Unexpected error while writing temporary PowerShell script", ioex);
